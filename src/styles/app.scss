@@ -1,0 +1,33 @@
+/* FileName: app.scss */
+@use "./library" as library;
+@use "./player" as player;
+@use "./song" as song;
+@use "./nav" as nav;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Gilroy", sans-serif;
+}
+
+body {
+    background: rgb(231, 235, 214);
+    background: linear-gradient(
+        180deg,
+        rgba(231, 235, 214, 1) 0%,
+        rgb(44, 79, 102) 100%
+    );
+}
+
+h2, h3 {
+    color: #0d2c6e;
+}
+
+h3, h4 {
+    font-weight: 600;
+}
+
+button {
+    font-weight: 700;
+}
