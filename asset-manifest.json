@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/musicapp/static/css/main.0ba69f0c.css",
-    "main.js": "/musicapp/static/js/main.727ac43b.js",
+    "main.css": "/musicapp/static/css/main.d2377cf2.css",
+    "main.js": "/musicapp/static/js/main.f52ef917.js",
     "static/js/453.21f478df.chunk.js": "/musicapp/static/js/453.21f478df.chunk.js",
     "index.html": "/musicapp/index.html",
-    "main.0ba69f0c.css.map": "/musicapp/static/css/main.0ba69f0c.css.map",
-    "main.727ac43b.js.map": "/musicapp/static/js/main.727ac43b.js.map",
+    "main.d2377cf2.css.map": "/musicapp/static/css/main.d2377cf2.css.map",
+    "main.f52ef917.js.map": "/musicapp/static/js/main.f52ef917.js.map",
     "453.21f478df.chunk.js.map": "/musicapp/static/js/453.21f478df.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0ba69f0c.css",
-    "static/js/main.727ac43b.js"
+    "static/css/main.d2377cf2.css",
+    "static/js/main.f52ef917.js"
   ]
 }
