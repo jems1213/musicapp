@@ -1,0 +1,164 @@
+.library-song {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin: 0.5rem 1rem;
+    backdrop-filter: blur(2px);
+    border-left: 3px solid transparent;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+        
+        img {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .library-song-info {
+            h3 {
+                color: #fff;
+            }
+            h4 {
+                color: rgba(255, 255, 255, 0.9);
+            }
+        }
+    }
+    .close-button {
+    position: sticky;
+    top: 1rem;
+    right: 1rem;
+    float: right;
+    margin: 0 0 1rem 0; // Simplified margin
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.2s ease;
+    background-color: rgba(235, 27, 27, 0.3);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 3.5rem; // Slightly larger for better touch targets
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    margin-left: auto; // Better positioning control
+    
+    // Ensure it stays visible when scrolling
+    transform: translateZ(0); // Force hardware acceleration
+    will-change: transform; // Optimize for animations
+    
+    &:hover {
+        transform: scale(1.15) rotate(90deg); // Smoother scaling
+        color: #ff9e9e;
+        background-color: rgba(235, 27, 27, 0.5);
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    // Mobile responsiveness
+    @media (max-width: 768px) {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.8rem;
+    }
+}
+
+
+    &.active {
+        background: rgba(255, 255, 255, 0.15);
+        border-left: 3px solid #0d2c6e;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, #0d2c6e, transparent);
+            animation: progress 2s linear infinite;
+        }
+    }
+
+    img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        margin-right: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        object-fit: cover;
+    }
+
+    .library-song-info {
+        flex: 1;
+        min-width: 0; // Allows text truncation
+        
+        h3 {
+            color: #fff;
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+
+        h4 {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+    }
+
+    // Pulse animation for currently playing song
+    @keyframes progress {
+        10% {
+            background-position: -100% 0;
+        }
+        100% {
+            background-position: 100% 0;
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .library-song {
+        padding: 0.8rem 1rem;
+        margin: 0.3rem 0.5rem;
+        
+        img {
+            width: 50px;
+            height: 50px;
+            margin-right: 1rem;
+        }
+        
+        .library-song-info {
+            h3 {
+                font-size: 2rem;
+            }
+            h4 {
+                font-size: 1.2rem;
+            }
+        }
+    }
+}

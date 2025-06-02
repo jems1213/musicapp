@@ -1,42 +1,24 @@
-// FileName: LibrarySong.js
-
 import React from "react";
+import "../styles/LibrarySong.scss";
 const LibrarySong = ({
     song,
-    songs,
     setCurrentSong,
     audioRef,
-    isPlaying,
-    setSongs,
-    id,
+    handleSongClick, // Receive the click handler as a prop
 }) => {
-    const songSelectHandler = async () => {
-        await setCurrentSong(song);
-        //active
-        const newSongs = songs.map((song) => {
-            if (song.id === id) {
-                return {
-                    ...song,
-                    active: true,
-                };
-            } else {
-                return {
-                    ...song,
-                    active: false,
-                };
-            }
-        });
-        setSongs(newSongs);
-        //check if song is playing
-        if (isPlaying) audioRef.current.play();
+
+    const songSelectHandler = () => {
+        setCurrentSong(song); // Set the current song
+        audioRef.current.play(); // Play the song
+        handleSongClick(); // Close the library
     };
+
     return (
-        <div
-            onClick={songSelectHandler}
-            className={`library-song ${song.active ? "selected" : ""}`}
-        >
+        
+        <div onClick={songSelectHandler} className="library-song">
+            
             <img src={song.cover} alt={song.name} />
-            <div className="song-description">
+            <div className="library-song-info">
                 <h3>{song.name}</h3>
                 <h4>{song.artist}</h4>
             </div>

@@ -7,7 +7,7 @@ import {
     faAngleRight,
     faPause,
 } from "@fortawesome/free-solid-svg-icons";
-
+   import "../styles/player.scss";
 const Player = ({
     currentSong,
     isPlaying,
@@ -17,77 +17,83 @@ const Player = ({
     songInfo,
     songs,
     setCurrentSong,
-    id,
     setSongs,
 }) => {
-    //useEffect
-    const activeLibraryHandler = (nextPrev) => {
-        const newSongs = songs.map((song) => {
-            if (song.id === nextPrev.id) {
-                return {
-                    ...song,
-                    active: true,
-                };
-            } else {
-                return {
-                    ...song,
-                    active: false,
-                };
-            }
-        });
-        setSongs(newSongs);
-        console.log("Hey from useEffect form player JS");
+    
+    const playAudio = () => {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    
+                })
+                .catch((error) => {
+                    console.warn("Playback error:", error);
+                });
+        }
     };
-    //Event Handlers
+
+    // Event Handlers
     const dragHandler = (e) => {
         audioRef.current.currentTime = e.target.value;
         setSongInfo({ ...songInfo, currentTime: e.target.value });
     };
+
     const playSongHandler = () => {
         if (isPlaying) {
             audioRef.current.pause();
-            setIsPlaying(!isPlaying);
+            setIsPlaying(false);
         } else {
-            audioRef.current.play();
-            setIsPlaying(!isPlaying);
+            setIsPlaying(true);
+            playAudio();
         }
     };
 
-    const getTime = (time) =>
-        Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2);
     const skipTrackHandler = async (direction) => {
         let currentIndex = songs.findIndex(
             (song) => song.id === currentSong.id
         );
-        if (direction === "skip-forward") {
-            await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
-            activeLibraryHandler(songs[(currentIndex + 1) % songs.length]);
-        }
-        if (direction === "skip-back") {
-            if ((currentIndex - 1) % songs.length === -1) {
-                await setCurrentSong(songs[songs.length - 1]);
-                // playAudio(isPlaying, audioRef);
-                activeLibraryHandler(songs[songs.length - 1]);
 
-                return;
-            }
-            await setCurrentSong(songs[(currentIndex - 1) % songs.length]);
-            activeLibraryHandler(songs[(currentIndex - 1) % songs.length]);
+        if (direction === "skip-forward") {
+            const nextSong = songs[(currentIndex + 1) % songs.length];
+            await setCurrentSong(nextSong);
+            activeLibraryHandler(nextSong);
         }
-        if (isPlaying) audioRef.current.play();
+
+        if (direction === "skip-back") {
+            const prevIndex =
+                (currentIndex - 1 + songs.length) % songs.length;
+            const prevSong = songs[prevIndex];
+            await setCurrentSong(prevSong);
+            activeLibraryHandler(prevSong);
+        }
     };
-    //adding the styles
+
+    const activeLibraryHandler = (nextPrev) => {
+        const newSongs = songs.map((song) => {
+            return {
+                ...song,
+                active: song.id === nextPrev.id,
+            };
+        });
+        setSongs(newSongs);
+    };
+
+    const getTime = (time) =>
+        Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2);
+
+    // Animation styles
     const trackAnim = {
         transform: `translateX(${songInfo.animationPercentage}%)`,
     };
+
     return (
         <div className="player">
             <div className="time-control">
                 <p>{getTime(songInfo.currentTime)}</p>
                 <div
                     style={{
-                        background: 
-`linear-gradient(to right, ${currentSong.color[0]}, ${currentSong.color[1]})`,
+                        background: `linear-gradient(to right, ${currentSong.color[0]}, ${currentSong.color[1]})`,
                     }}
                     className="track"
                 >
@@ -126,7 +132,6 @@ const Player = ({
                         icon={faPause}
                     />
                 )}
-
                 <FontAwesomeIcon
                     onClick={() => skipTrackHandler("skip-forward")}
                     size="2x"

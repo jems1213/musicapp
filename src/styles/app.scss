@@ -4,30 +4,398 @@
 @use "./song" as song;
 @use "./nav" as nav;
 
+// Variables
+$primary-color: #0d2c6e;
+$secondary-color: #2c4f66;
+$accent-color: #e7ebd6;
+$gradient-start: rgba(231, 235, 214, 0.9);
+$gradient-end: rgba(44, 79, 102, 0.9);
+$text-dark: #333;
+$text-light: #f8f8f8;
+$shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+$border-radius: 12px;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media (max-width: 600px) { @content; }
+    }
+    @if $breakpoint == tablet {
+        @media (max-width: 900px) { @content; }
+    }
+    @if $breakpoint == desktop {
+        @media (min-width: 1200px) { @content; }
+    }
+}
+
+// Base Styles
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Gilroy", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 62.5%; // 1rem = 10px
+    scroll-behavior: smooth;
+    
+    @include respond(tablet) {
+        font-size: 56.25%; // 1rem = 9px
+    }
+    
+    @include respond(phone) {
+        font-size: 50%; // 1rem = 8px
+    }
 }
 
 body {
-    background: rgb(231, 235, 214);
-    background: linear-gradient(
-        180deg,
-        rgba(231, 235, 214, 1) 0%,
-        rgb(44, 79, 102) 100%
-    );
+    background: linear-gradient(180deg, $gradient-start 0%, $gradient-end 100%);
+    min-height: 100vh;
+    color: $text-dark;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1000') center/cover no-repeat;
+        opacity: 0.1;
+        z-index: -1;
+    }
 }
 
-h2, h3 {
-    color: #0d2c6e;
+// Typography
+h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
 }
 
-h3, h4 {
+h2 {
+    color: $primary-color;
+    font-size: 3.2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    
+    @include respond(phone) {
+        font-size: 2.8rem;
+    }
+}
+
+h3 {
+    color: $primary-color;
+    font-size: 2.4rem;
+    font-weight: 600;
+    
+    @include respond(phone) {
+        font-size: 2rem;
+    }
+}
+
+h4 {
+    font-size: 1.8rem;
     font-weight: 600;
 }
 
+p {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+}
+
+// Buttons
 button {
     font-weight: 700;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: $transition;
+    font-size: 1.6rem;
+    box-shadow: $shadow;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        background-color: darken($primary-color, 5%);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+    
+    &.secondary {
+        background-color: $secondary-color;
+        
+        &:hover {
+            background-color: darken($secondary-color, 5%);
+        }
+    }
+    
+    &.outline {
+        background: transparent;
+        border: 2px solid $primary-color;
+        color: $primary-color;
+        
+        &:hover {
+            background: $primary-color;
+            color: white;
+        }
+    }
 }
+
+// Utility Classes
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section {
+    padding: 6rem 0;
+    
+    @include respond(phone) {
+        padding: 4rem 0;
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.animate {
+    animation: fadeIn 0.6s ease forwards;
+    
+    &--delay-1 {
+        animation-delay: 0.2s;
+    }
+    
+    &--delay-2 {
+        animation-delay: 0.4s;
+    }
+    
+    &--slide {
+        animation: slideUp 0.6s ease forwards;
+    }
+    
+    &--pulse {
+        animation: pulse 2s infinite;
+    }
+}
+
+// New Features
+.now-playing {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    transition: $transition;
+    
+    &__artwork {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        margin-right: 1.5rem;
+        object-fit: cover;
+        animation: rotateAlbumArt 20s linear infinite;
+        animation-play-state: paused;
+        
+        .playing & {
+            animation-play-state: running;
+        }
+    }
+    
+    &__info {
+        flex: 1;
+        
+        h4 {
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        p {
+            font-size: 1.4rem;
+            color: lighten($text-dark, 20%);
+            margin-bottom: 0;
+        }
+    }
+    
+    &__controls {
+        @include flex-center;
+        
+        button {
+            background: none;
+            border: none;
+            color: $primary-color;
+            font-size: 2rem;
+            margin: 0 1rem;
+            padding: 0.5rem;
+            box-shadow: none;
+            
+            &:hover {
+                transform: scale(1.1);
+                background: none;
+            }
+        }
+    }
+    
+    @keyframes rotateAlbumArt {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+}
+
+.progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background-color: $primary-color;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+// Dark Mode Toggle
+.theme-toggle {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    
+    &__btn {
+        @include flex-center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: $shadow;
+        cursor: pointer;
+        transition: $transition;
+        
+        &:hover {
+            transform: rotate(30deg);
+        }
+        
+        svg {
+            width: 2rem;
+            height: 2rem;
+            fill: $primary-color;
+        }
+    }
+}
+
+// Responsive Grid
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+    
+    @include respond(phone) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $shadow;
+    transition: $transition;
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    &__image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    
+    &__content {
+        padding: 1.5rem;
+    }
+    
+    &__title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    &__description {
+        font-size: 1.4rem;
+        color: lighten($text-dark, 20%);
+        margin-bottom: 1.5rem;
+    }
+}
+
+// Loading Spinner
+.loading-spinner {
+    @include flex-center;
+    width: 100%;
+    padding: 3rem;
+    
+    &__circle {
+        width: 4rem;
+        height: 4rem;
+        border: 4px solid rgba($primary-color, 0.2);
+        border-top-color: $primary-color;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+}
+
+// // Import Component Styles
+// @use "./library" as library;
+// @use "./player" as player;
+// @use "./song" as song;
+// @use "./nav" as nav;
